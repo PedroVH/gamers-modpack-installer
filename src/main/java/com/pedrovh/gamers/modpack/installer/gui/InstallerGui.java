@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -211,6 +212,8 @@ public class InstallerGui extends JFrame implements WindowListener {
     }
 
     public static String getInstallLocation() {
+        if (GraphicsEnvironment.isHeadless())
+            return Paths.get("").toAbsolutePath().toString();
         return mcDirField.getText();
     }
 

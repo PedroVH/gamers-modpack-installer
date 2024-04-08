@@ -5,6 +5,7 @@ import com.pedrovh.gamers.modpack.installer.gui.Popup;
 import net.lingala.zip4j.ZipFile;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -45,28 +46,33 @@ public abstract class AbstractInstallHandler implements ActionListener, Runnable
 
     @Override
     public void run() {
-        this.pop = new Popup(title, this);
-        try {
-            pop.start();
-        } catch (Exception ex) {
-            System.out.println("Error - " + ex);
+        if (!GraphicsEnvironment.isHeadless()) {
+            this.pop = new Popup(title, this);
+            try {
+                pop.start();
+            } catch (Exception ex) {
+                System.out.println("Error - " + ex);
+            }
         }
-
         if(isNotDownloaded()) {
             System.out.println("Downloading " + title);
-            pop.update("Downloading...");
+            if (!GraphicsEnvironment.isHeadless())
+                pop.update("Downloading...");
             download();
         }
         System.out.println("Installing " + title);
-        pop.update("Installing...");
+        if (!GraphicsEnvironment.isHeadless())
+            pop.update("Installing...");
         install();
-        pop.update("Done!");
-        try {
-            Thread.sleep(500L);
-        } catch (InterruptedException e) {
-            System.out.println("Error - " + e.getMessage());
+        if (!GraphicsEnvironment.isHeadless()) {
+            pop.update("Done!");
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException e) {
+                System.out.println("Error - " + e.getMessage());
+            }
+            pop.close();
         }
-        pop.close();
     }
 
     public boolean isNotDownloaded() {
@@ -78,7 +84,8 @@ public abstract class AbstractInstallHandler implements ActionListener, Runnable
         try {
             download(downloadUrl, fileName);
         } catch (IOException e) {
-            pop.close();
+            if (!GraphicsEnvironment.isHeadless())
+                pop.close();
             System.out.println("Error downloading " + title);
         }
     }
@@ -100,15 +107,18 @@ public abstract class AbstractInstallHandler implements ActionListener, Runnable
         try(ZipFile zipFile = new ZipFile(fileName)) {
             zipFile.extractAll(dir);
         } catch (IOException e) {
-            pop.error(format("Error extracting %s to %s", title, dir));
-            pop.close();
+            if (!GraphicsEnvironment.isHeadless()) {
+                pop.error(format("Error extracting %s to %s", title, dir));
+                pop.close();
+            }
         }
     }
 
     public String getMCDir() {
         String mcDir = InstallerGui.getInstallLocation();
         if (mcDir == null || mcDir.isEmpty() || !new File(mcDir).exists() || !new File(mcDir).isDirectory()) {
-            pop.error("Selecione um local de instalação válido!");
+            if (!GraphicsEnvironment.isHeadless())
+                pop.error("Selecione um local de instalação válido!");
             return null;
         }
         return mcDir;
