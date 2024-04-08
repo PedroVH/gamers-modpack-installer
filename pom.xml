@@ -6,7 +6,7 @@
 
     <groupId>com.pedrovh</groupId>
     <artifactId>gamers-modpack-installer</artifactId>
-    <version>0.5</version>
+    <version>1.1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
