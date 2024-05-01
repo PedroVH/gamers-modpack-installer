@@ -87,6 +87,7 @@ public abstract class AbstractInstallHandler implements ActionListener, Runnable
             if (!GraphicsEnvironment.isHeadless())
                 pop.close();
             System.out.println("Error downloading " + title);
+            e.printStackTrace();
         }
     }
 
@@ -107,6 +108,8 @@ public abstract class AbstractInstallHandler implements ActionListener, Runnable
         try(ZipFile zipFile = new ZipFile(fileName)) {
             zipFile.extractAll(dir);
         } catch (IOException e) {
+            System.out.println("Error extracting " + title);
+            e.printStackTrace();
             if (!GraphicsEnvironment.isHeadless()) {
                 pop.error(format("Error extracting %s to %s", title, dir));
                 pop.close();
