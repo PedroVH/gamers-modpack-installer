@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class IrisModpackInstallHandler extends AbstractInstallHandler {
 
-    public static final String FILE_NAME = "iris-sodium-beta.zip";
+    public static final String FILE_NAME = "iris-sodium.zip";
 
     public IrisModpackInstallHandler() {
         super(InstallerGui.irisButton, "Iris", FILE_NAME, InstallerProperties.get("modpack.iris.url"));
